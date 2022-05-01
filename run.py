@@ -105,5 +105,5 @@ def input_volt(iptVs, dt):
 time, voltage = input_volt(inputVs, dt)
 print(len(time), len(voltage))
 x, i = solver2(dxdt, time, dt, 0.0, voltage)
-plt.plot(time, i)
+plt.plot(time, voltage/i)
 plt.show()

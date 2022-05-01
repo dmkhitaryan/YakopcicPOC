@@ -56,7 +56,7 @@ class YakopcicSET(Experiment):
     def __init__(self):
         super(YakopcicSET, self).__init__(
             sim_args={"t_max": 7, "frequency": 10e3, "x0": 0.0},
-            model=yakopcic_model.Yakopcic,
+            model=yakopcic_model.YakopcicNew,
             input_function=functions.SETPulse,
             memristor_args={
                 "a1": 0.097,

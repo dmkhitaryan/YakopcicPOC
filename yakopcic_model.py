@@ -15,6 +15,10 @@ def mim_iv(v, g, b):
     return g * np.sinh(b * v)
 
 
+def mim_mim_iv(v, gp, bp, gn, bn):
+    return np.piecewise(v, [v >= 0, v < 0],
+                        [lambda v: mim_iv(v, gp, bp), lambda v: mim_iv(v, gn, bn)])
+
 def euler_step(x, t, f, dt, v, args):
     return x + f(t, v, x, *args) * dt
 
@@ -34,6 +38,14 @@ class YakopcicNew:
         self.gmax = kwargs["gmax"] if "gmax" in kwargs else 0.17
         self.bmin = kwargs["bmin"] if "bmin" in kwargs else 0.05
         self.bmax = kwargs["bmax"] if "bmax" in kwargs else 0.05
+        self.gmax_p = 9e-5
+        self.bmax_p = 4.96
+        self.gmax_n = 1.7e-4
+        self.bmax_n = 3.23
+        self.gmin_p = 1.5e-5
+        self.bmin_p = 6.91
+        self.gmin_n = 4.4e-7
+        self.bmin_n = 2.6
         self.Ap = kwargs["Ap"] if "Ap" in kwargs else 4000
         self.An = kwargs["An"] if "An" in kwargs else 4000
         self.Vp = kwargs["Vp"] if "Vp" in kwargs else 0.16
@@ -44,8 +56,8 @@ class YakopcicNew:
         self.xn = kwargs["xn"] if "xn" in kwargs else 0.5
         self.eta = kwargs["eta"] if "eta" in kwargs else 1
 
-        self.h1 = kwargs["h1"] if "h1" in kwargs else mim_iv
-        self.h2 = kwargs["h2"] if "h2" in kwargs else mim_iv
+        self.h1 = kwargs["h1"] if "h1" in kwargs else mim_mim_iv
+        self.h2 = kwargs["h2"] if "h2" in kwargs else mim_mim_iv
 
     def I(self, t, v, x, read=None, *args):
         """
@@ -79,9 +91,17 @@ class YakopcicNew:
         gmax = args[1] if len(args) > 1 else self.gmax
         bmin = args[2] if len(args) > 2 else self.bmin
         bmax = args[3] if len(args) > 2 else self.bmax
+        gmax_p = self.gmax_p
+        bmax_p = self.bmax_p
+        gmax_n = self.gmax_n
+        bmax_n = self.bmax_n
+        gmin_p = self.gmin_p
+        bmin_p = self.bmin_p
+        gmin_n = self.gmin_n
+        bmin_n = self.bmin_n
 
         #v = self.V(t, read)
-        i = self.h1(v, gmax, bmax) * x + self.h2(v, gmin, bmin) * (1 - x)
+        i = self.h1(v, gmax_p, bmax_p, gmax_n, bmax_n) * x + self.h2(v, gmin_p, bmin_p, gmin_n, bmin_n) * (1 - x)
 
         return i
 
