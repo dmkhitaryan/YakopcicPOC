@@ -99,14 +99,13 @@ class ConverterFrame(ttk.Frame):
         try:
             # Dictionary containing tk.Entry objects instead of actual values
             # This is converted into appropriate dictionary later
-            preinputV = {'t_rise': self.temperature_entry1.get(),
-                         't_on': self.temperature_entry2.get(),
-                         't_fall': self.temperature_entry3.get(),
-                         't_off': self.temperature_entry4.get(),
-                         'V_on': self.temperature_entry5.get(),
-                         'V_off': self.temperature_entry6.get(),
-                         'n_cycles': self.temperature_entry7.get()}
-
+            preinputV = {'t_rise': float(self.temperature_entry1.get()),
+                         't_on': float(self.temperature_entry2.get()),
+                         't_fall': float(self.temperature_entry3.get()),
+                         't_off': float(self.temperature_entry4.get()),
+                         'V_on': float(self.temperature_entry5.get()),
+                         'V_off': float(self.temperature_entry6.get()),
+                         'n_cycles': float(self.temperature_entry7.get())}
 
             self.inputVs[self.counter] = preinputV
             self.counter += 1
@@ -119,13 +118,12 @@ class ConverterFrame(ttk.Frame):
 
     def interactive_iv(self):
         iptVs = self.inputVs
-        print(iptVs)
         dt = 10e-3
         t = 0
         frequency = int(1 / dt)
         v_total = np.array([0])
         for iptV in iptVs.values():
-            print("Printing:", iptV)
+            print("Printing:", iptV.get)
             for j in range(0, int(iptV['n_cycles'])):
                 t, v_total = interactive_generate(iptV, frequency, t)
 

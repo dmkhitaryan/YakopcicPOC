@@ -22,7 +22,7 @@ class Experiment:
         self.memristor_args = memristor_args
         self.memristor_args.update({"x0": sim_args["x0"]})
         self.memristor = model(self.input_function, **self.memristor_args)
-        self.memristor.print()
+        #self.memristor.print()
 
         self.functions = {
             "dxdt": self.memristor.dxdt,
@@ -34,10 +34,10 @@ class Experiment:
             "noise": 10
         }
 
-        print("Simulation:")
-        print(f"\tTime range [ {self.t_min}, {self.t_max} ]")
-        print(f"\tSamples {self.simulation['N']}")
-        print(f"\tInitial value of state variable {self.simulation['x0']}")
+        #print("Simulation:")
+        #print(f"\tTime range [ {self.t_min}, {self.t_max} ]")
+        #print(f"\tSamples {self.simulation['N']}")
+        #print(f"\tInitial value of state variable {self.simulation['x0']}")
 
     def recalculate_time(self, t_max):
         self.dt = 1 / self.frequency
@@ -62,8 +62,8 @@ class YakopcicSET(Experiment):
                 "a1": 0.097,
                 "a2": 0.097,
                 "b": 0.05,
-                "Ap": 90/844.3632,
-                "An": 10/844.3632,
+                "Ap": 0.1065893286 * 10e1,
+                "An": 0.0118432587 * 10e1,
                 "Vp": 0.5,
                 "Vn": 0.5,
                 "alphap": 1,
