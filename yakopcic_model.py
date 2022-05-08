@@ -16,19 +16,16 @@ def mim_iv(v, g, b):
 
 
 def mim_mim_iv(v, gp, bp, gn, bn):
-    return np.piecewise(v, [v >= 0, v < 0],
-                        [lambda v: mim_iv(v, gp, bp), lambda v: mim_iv(v, gn, bn)])
+    return np.where(v >= 0, mim_iv(v, gp, bp), mim_iv(v, gn, bn))
+
 
 def euler_step(x, t, f, dt, v, args):
     return x + f(t, v, x, *args) * dt
 
 
 class YakopcicNew:
-    def __init__(self, input, **kwargs):
+    def __init__(self, **kwargs):
         self.type = "Yakopcic new model"
-
-        self.input = input
-        self.V = input
         self.x0 = kwargs["x0"] if "x0" in kwargs else 0.1
 
         self.passed_parameters = kwargs

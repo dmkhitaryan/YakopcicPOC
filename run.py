@@ -1,17 +1,12 @@
 import argparse
-
 import numpy as np
-
 import yakopcic_model
-import tkinter as tk
 from experiment_setup import *
 from functions import *
 from yakopcic_model import *
 
 experiment = YakopcicSET()
-V = experiment.functions["V"]
 I = experiment.functions["I"]
-T = experiment.simulation["time"]
 dxdt = experiment.functions["dxdt"]
 dt = experiment.simulation["dt"]
 
@@ -33,6 +28,7 @@ def calculate_resistance(voltage, current):
             resistance_trim.append(resistance[i])
     resistance_trim = list(dict.fromkeys(resistance_trim))
     plt.plot(range(0, len(resistance_trim)), resistance_trim, "o")
+    plt.title("Trimmed resistance of Yakopcic memristor")
     plt.yscale("log")
     plt.show()
 
@@ -44,7 +40,7 @@ def solver2(f, time, dt, iv, v, args=[]):
     current = [0.0]
 
     for i in range(1, len(time)):
-        current.append(I(time[i], v[i], x_sol[-1]))
+        #current.append(I(time[i], v[i], x_sol[-1]))
         # print(x_sol[-1])
         x = euler_step(x_sol[-1], time[i], f, dt, v[i], args)
         # print("x:", x)
@@ -56,7 +52,7 @@ def solver2(f, time, dt, iv, v, args=[]):
         x_sol.append(x)
     x_sol = np.array(x_sol)
 
-    return x_sol, current
+    return x_sol
 
 # Produces the voltage pulses based on the given inputs.
 # Is currently hardcoded, to be adjusted for generalized inputs.
@@ -119,11 +115,20 @@ def startup():
             print("Please provide correct inputs.")
             continue
 
-#iptVs = startup()
-time, voltage = input_volt(inputVs, dt)
-#time, voltage = interactive_iv(iptVs, dt)
-print(len(time), len(voltage))
-x, i = solver2(dxdt, time, dt, 0.0, voltage)
-calculate_resistance(voltage, i)
-plt.plot(time, voltage/i)
-plt.show()
+
+def main():
+    #iptVs = startup()
+    time, voltage = input_volt(inputVs, dt)
+    #time, voltage = interactive_iv(iptVs, dt)
+
+    x = solver2(dxdt, time, dt, 0.0, voltage)
+    print("time length:", len(time), "\n", "voltage length:", len(voltage), "\n", "x length:", len(x))
+    i = I(time, voltage, x)
+    #calculate_resistance(voltage, i)
+    plt.plot(time, voltage/i)
+    plt.title("Resistance of Yakopcic memristor")
+    plt.show()
+
+
+if __name__ == "__main__":
+    main()
