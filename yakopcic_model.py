@@ -1,13 +1,6 @@
 import numpy as np
-import os
-import scipy.signal
-from scipy import interpolate
-from order_of_magnitude import order_of_magnitude
-
 import matplotlib.pyplot as plt
-import matplotlib.lines as mlines
-import matplotlib.patches as mpatches
-import matplotlib.animation as animation
+
 from scipy.integrate import solve_ivp
 
 
@@ -71,6 +64,7 @@ class YakopcicNew:
         Parameters
         ----------
         t : time
+        v: voltage
         x : state variable
 
         Attributes
@@ -350,6 +344,7 @@ class Yakopcic():
         Parameters
         ----------
         t : time
+        v: voltage
         x : state variable
 
         Attributes
