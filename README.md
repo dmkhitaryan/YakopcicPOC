@@ -17,8 +17,8 @@ experiment setup.
 
 The `input_volt/interactive_iv` functions essentially do the same thing:
 both create voltage pulses based on parameters such as 'on' and 'off' voltages among others.
-The difference is that the first function is hardcoded (for testing purposes), whereas the 
-second one is the generalised solution for future uses.  
+The difference is that the first function is hardcoded (for testing purposes, is now deprecated), whereas the 
+second function is the generalised solution that works for varying number of pulses.  
 
 
 The `generate_wave` function is responsible for actually constructing the array for the 
@@ -38,3 +38,10 @@ setting a multitude of parameters (e.g., _Vp_ and _Vn_ defining positive and neg
 thresholds beyond which voltages begin altering the state variable), as well as defining numerous
 functions, for example, the current _I_. For more information on the specifics of the functions 
 within, refer to the docstrings within the fire.
+
+## Running the project (run.py)
+The code is ran from here. The program takes whitespace-separated sequence of inputs, the order of
+which is shown during the input. If the input is of incorrect format (e.g., missing an argument), it
+won't be accepted and the program will request another attempt at inputting. Inputs will be taken until
+all arguments are passed with the first specifically being *-1*. When that is parsed, the functions from
+files above are called with the dict of voltage pulses as main input.
