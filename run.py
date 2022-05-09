@@ -1,4 +1,6 @@
 import argparse
+
+import matplotlib.pyplot as plt
 import numpy as np
 import yakopcic_model
 from experiment_setup import *
@@ -20,17 +22,19 @@ def startup():
     iptVs = {}
     print("Please input your voltage pulses in the following format:\n",
           "t_rise t_on t_fall t_off V_on V_off n_cycles")
-    wave_number = 0
+    wave_number = 1
     while True:
         try:
-            t_rise, t_on, t_fall, t_off, V_on, V_off, n_cycles = map(float, input("Enter a wave or -1 to end inputs:\n").split())
+            t_rise, t_on, t_fall, t_off, V_on, V_off, n_cycles = map(float, input(
+                "Enter a wave or -1 to end inputs:\n").split())
             if t_rise == -1:
                 print("Inputs collected.")
                 return iptVs
             iptV = {"t_rise": t_rise, "t_on": t_on, "t_fall": t_fall, "t_off": t_off, "V_on": V_on, "V_off": V_off,
-                    "n_cycles": n_cycles}
-            print(iptV)
-            iptVs["{}.format(wave_number)"] = iptV
+                    "n_cycles": int(n_cycles)}
+            #print(iptV)
+            iptVs["{}".format(wave_number)] = iptV
+            wave_number += 1
             continue
         except ValueError:
             print("Please provide correct inputs.")
@@ -38,14 +42,13 @@ def startup():
 
 
 def main():
-    #iptVs = startup()
-    time, voltage = input_volt(inputVs, dt)
-    #time, voltage = interactive_iv(iptVs, dt)
+    iptVs = startup()
+    time, voltage = interactive_iv(iptVs, dt)
 
     x = solver2(dxdt, time, dt, 0.0, voltage)
     print("time length:", len(time), "\n", "voltage length:", len(voltage), "\n", "x length:", len(x))
     i = I(time, voltage, x)
-    #calculate_resistance(voltage, i)
+    # calculate_resistance(voltage, i)
     plt.plot(time, voltage/i)
     plt.title("Resistance of Yakopcic memristor")
     plt.show()
