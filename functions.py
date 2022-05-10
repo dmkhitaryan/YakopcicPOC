@@ -21,20 +21,17 @@ def calculate_resistance(voltage, current):
 # Euler step-based solver that calculates the state variable and current for each time point.
 # Return the resulting two arrays.
 def solver2(f, time, dt, iv, v, args=[]):
-    x_sol = [iv]
+    x_sol = np.zeros(len(time))
+    x_sol[0] = iv
 
     for i in range(1, len(time)):
-        # current.append(I(time[i], v[i], x_sol[-1]))
-        # print(x_sol[-1])
-        x = euler_step(x_sol[-1], time[i], f, dt, v[i], args)
-        # print("x:", x)
+        x = euler_step(x_sol[i-1], time[i], f, dt, v[i], args)
         if x < 0:
             x = 0
         if x > 1:
             x = 1
 
-        x_sol.append(x)
-    x_sol = np.array(x_sol)
+        x_sol[i] = x
 
     return x_sol
 
