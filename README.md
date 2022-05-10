@@ -40,8 +40,13 @@ functions, for example, the current _I_. For more information on the specifics o
 within, refer to the docstrings within the fire.
 
 ## Running the project (run.py)
-The code is ran from here. The program takes whitespace-separated sequence of inputs, the order of
-which is shown during the input. If the input is of incorrect format (e.g., missing an argument), it
-won't be accepted and the program will request another attempt at inputting. Inputs will be taken until
-all arguments are passed with the first specifically being *-1*. When that is parsed, the functions from
-files above are called with the dict of voltage pulses as main input.
+The code is ran from here. The program takes the input.txt file as an input that contains N lines 
+of the voltage pulse waves. The file can be adjusted as desired to add/remove more waves for example.
+The formatting order is as follows:
+* `t_rise`**(s)**: time for the voltage to go from 'off' to 'on' state.
+* `t_on`**(s)**: time the voltage remains in the 'on' state.
+* `t_fall`**(s)** time for the voltage to go from 'on' to 'off' state.
+* `t_off`**(s)**: time the voltage remains in the 'off' state.
+* `V_on`**(V)**:  the voltage during the 'on' state.
+* `V_off`**(V)**: the voltage during the 'off' state.
+* `n_cycles`: the number of times the pulse is repeated.
