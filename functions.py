@@ -1,23 +1,6 @@
 from yakopcic_model import *
 
 
-# Given voltage and current numpy arrays, this function calculates the resistances.
-# Those are then checked for segments of reading voltages (resistance is same value multiple times in a row).
-# If true, add those into a separate list, with the duplicates removed after.
-# Produce the resulting graph.
-def calculate_resistance(voltage, current):
-    resistance = voltage / current
-    resistance_trim = []
-    for i in range(0, len(resistance) - 1):
-        if resistance[i] == resistance[i + 1]:
-            resistance_trim.append(resistance[i])
-    resistance_trim = list(dict.fromkeys(resistance_trim))
-    plt.plot(range(0, len(resistance_trim)), resistance_trim, "o")
-    plt.title("Trimmed resistance of Yakopcic memristor")
-    plt.yscale("log")
-    plt.show()
-
-
 # Euler step-based solver that calculates the state variable and current for each time point.
 # Return the resulting two arrays.
 def solver2(f, time, dt, iv, v, args=[]):
