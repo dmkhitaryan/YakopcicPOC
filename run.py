@@ -2,6 +2,8 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.signal
+
 import yakopcic_model
 from experiment_setup import *
 from functions import *
@@ -30,14 +32,30 @@ def startup2():
 
 
 def main():
+    np.seterr(all="raise")
     iptVs = startup2()
     time, voltage = interactive_iv(iptVs, dt)
-    x = solver2(dxdt, time, dt, 0.0, voltage)
+    x = solver2(dxdt, time, dt, 0.5, voltage)
     i = I(time, voltage, x)
-    plt.plot(time[:], (voltage[:]/i[:])*10)
-    plt.title("Resistance of the Yakopcic memristor")
+    r = np.divide(voltage, i, out=np.zeros(voltage.shape, dtype=float)+200, where=i != 0)
+
+    peak_ids = scipy.signal.find_peaks(r)
+    peak = [0]
+    for idx in peak_ids[0]:
+        peak.append(r[idx])
+
+    peak = peak[0:1] + peak[4:14] + peak[14::2] + peak[-1]
+
+    plt.figure(figsize=(7, 5))
+    plt.plot(range(0,len(peak)), peak, "o", markerfacecolor='none', ms=5, markeredgecolor='green')
+    #plt.title("Resistance of the Yakopcic memristor")
+    plt.xlabel("Pulse Number", fontsize=15)
+    plt.ylabel("Resistance (Ω)", fontsize=15)
+    plt.ylim(10e4,2e6)
     plt.yscale("log")
+    plt.xticks((0,5,10,20))
     plt.show()
+
 
 
 if __name__ == "__main__":
